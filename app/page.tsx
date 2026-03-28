@@ -174,6 +174,9 @@ function ModalProducto({ producto, onClose }: any) {
   const desc = parseFloat(producto.Descuento) || 0;
   const precioFinal = precioBase - (precioBase * (desc / 100));
 
+  // --- ESTO BUSCA LA DESCRIPCIÓN SIN IMPORTAR TILDES O MAYÚSCULAS ---
+  const descripcionReal = producto.Descripcion || producto.Descripción || producto.descripcion || producto.descripción || "";
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-md overflow-y-auto">
       <div className="bg-[#111] w-full max-w-5xl min-h-[500px] rounded-[3rem] overflow-hidden border border-white/10 flex flex-col md:flex-row relative">
@@ -212,28 +215,30 @@ function ModalProducto({ producto, onClose }: any) {
         <div className="md:w-1/2 p-8 md:p-14 flex flex-col justify-center">
           <div className="mb-2 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            <span className="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase">Tech Details</span>
+            <span className="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase">Especificaciones</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter uppercase italic leading-none">{producto.Producto}</h2>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter uppercase italic leading-none text-white">{producto.Producto}</h2>
 
-          <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8 border-l border-white/10 pl-6 italic">
-            {producto.Descripcion || "Este equipo cuenta con garantía oficial y stock inmediato en Santa Fe. Consultanos por disponibilidad de colores."}
-          </p>
+          {/* AQUÍ SE MUESTRA LA DESCRIPCIÓN O EL MENSAJE POR DEFECTO */}
+          <div className="text-gray-300 text-sm md:text-base leading-relaxed mb-8 border-l-2 border-blue-600 pl-6 bg-white/5 py-4 rounded-r-xl">
+            {descripcionReal ? (
+              <p className="whitespace-pre-line">{descripcionReal}</p>
+            ) : (
+              <p className="italic text-gray-500">Consultanos los detalles técnicos de este equipo (Batería, Almacenamiento, Garantía) directamente por WhatsApp.</p>
+            )}
+          </div>
 
           <div className="mb-10">
             <div className="flex items-baseline gap-4">
               <span className="text-4xl md:text-5xl font-black italic text-white tracking-tighter">
                 ${precioFinal.toLocaleString('es-AR')}
               </span>
-              {desc > 0 && <span className="text-gray-600 line-through font-bold">${precioBase.toLocaleString('es-AR')}</span>}
+              {desc > 0 && <span className="text-gray-600 line-through font-bold text-xl">${precioBase.toLocaleString('es-AR')}</span>}
             </div>
-            {producto.Cuotas > 1 && (
-              <p className="text-green-500 text-xs font-black mt-2 uppercase tracking-widest">💳 {producto.Cuotas} PAGOS DISPONIBLES</p>
-            )}
           </div>
 
           <a
-            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola Click Cell! Me interesa el ${producto.Producto}`}
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola Click Cell! Me interesa el ${producto.Producto}. ¿Me pasan más info?`}
             target="_blank"
             className="block w-full bg-white text-black text-center py-5 rounded-2xl font-black uppercase tracking-widest transition-all hover:bg-blue-600 hover:text-white shadow-xl active:scale-95"
           >
