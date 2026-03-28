@@ -40,26 +40,25 @@ export default function Home() {
     <main className="min-h-screen bg-[#0f0f0f] text-gray-100 font-sans selection:bg-blue-500/30">
 
       {/* NAVBAR CON LOGO EDITADO */}
-      <nav className="bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 py-3">
+      <nav className="bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 py-4">
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-5">
-            {/* CONTENEDOR DEL LOGO: Más grande y con resplandor azul */}
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-blue-600 shadow-[0_0_25px_rgba(37,99,235,0.6)] bg-black transition-transform hover:scale-110 duration-300">
-              <img
-                src="/logo.png"
-                alt="Logo Click Cell"
-                className="w-full h-full object-cover p-1"
-              />
+          <div className="flex items-center gap-4">
+
+            {/* LOGO GIGANTE Y SIN BORDES VACÍOS */}
+            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-600 shadow-[0_0_25px_rgba(37,99,235,0.6)] bg-black transition-all hover:scale-110">
+              {/* Le saqué el padding p-1 y le puse object-cover */}
+              <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
+
             <div className="hidden sm:block">
-              <h1 className="text-2xl font-black tracking-tighter leading-none italic">CLICK CELL</h1>
-              <p className="text-[10px] uppercase tracking-[0.4em] text-blue-500 font-bold">Santa Fe</p>
+              <h1 className="text-2xl font-black tracking-tighter leading-none text-white">CLICK CELL</h1>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-blue-500 font-bold">Santa Fe</p>
             </div>
           </div>
 
           <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank"
-            className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-full text-xs font-black shadow-lg shadow-blue-600/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest">
-            Contacto Directo
+            className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-full text-xs font-black shadow-lg shadow-blue-600/20 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest">
+            WHATSAPP
           </a>
         </div>
       </nav>
