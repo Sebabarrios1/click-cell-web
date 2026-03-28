@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+// @ts-ignore
 import Papa from "papaparse";
 
 const LINK_EXCEL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRenKoLwAkllhVjn41RJWW2PD9GA1X3bo__P8dbD1o0yo6u7Sr1Bf_KYuL-i6Y7lpodNF-x1PS7eOWC/pub?output=csv";
@@ -13,7 +14,7 @@ export default function Home() {
     Papa.parse(LINK_EXCEL_CSV, {
       download: true,
       header: true,
-      complete: (results) => {
+      complete: (results: any) => {
         const datosLimpios = results.data.filter((p: any) => p.Producto);
         setProductos(datosLimpios);
         setLoading(false);
@@ -22,8 +23,8 @@ export default function Home() {
   }, []);
 
   if (loading) return (
-    <div className="flex h-screen items-center justify-center bg-[#0a0a0a] text-blue-500">
-      <div className="animate-pulse font-black tracking-widest text-2xl">CLICK CELL...</div>
+    <div className="flex h-screen items-center justify-center bg-[#0a0a0a] text-blue-500 font-sans">
+      <div className="animate-pulse font-black tracking-widest text-2xl uppercase">Click Cell...</div>
     </div>
   );
 
@@ -37,12 +38,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#0f0f0f] text-gray-100 font-sans selection:bg-blue-500/30">
-
-      {/* NAVBAR ESTILO APPLE */}
       <nav className="bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50 py-4">
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)]">
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)] bg-black">
               <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block">
@@ -50,15 +49,13 @@ export default function Home() {
               <p className="text-[9px] uppercase tracking-[0.3em] text-blue-500 font-bold">Smartphones & Tech</p>
             </div>
           </div>
-
           <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank"
-            className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full text-xs font-black shadow-lg shadow-blue-600/20 transition-all hover:scale-105 active:scale-95 uppercase">
+            className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full text-xs font-black shadow-lg transition-all hover:scale-105 active:scale-95 uppercase">
             Contacto Directo
           </a>
         </div>
       </nav>
 
-      {/* HERO SECTION / BANNER */}
       <header className="relative py-20 overflow-hidden bg-gradient-to-b from-[#0a0a0a] to-[#0f0f0f]">
         <div className="max-w-6xl mx-auto px-6 relative z-10 text-center md:text-left">
           <span className="text-blue-500 font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Santa Fe, Argentina</span>
@@ -69,7 +66,6 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-600/10 blur-[120px] rounded-full"></div>
       </header>
 
-      {/* SECCIÓN DESTACADOS - GRILLA DE LUJO */}
       {destacados.length > 0 && (
         <section className="max-w-6xl mx-auto px-6 pb-20">
           <div className="flex items-center gap-4 mb-10">
@@ -82,7 +78,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* RESTO DE LOS PRODUCTOS */}
       <section className="max-w-6xl mx-auto px-6 pb-20">
         <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-10">Explorá el stock</h3>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -90,12 +85,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="border-t border-white/5 py-16 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="w-16 h-16 mx-auto mb-6 opacity-50 grayscale hover:grayscale-0 transition-all">
-            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
-          </div>
           <p className="text-gray-500 text-xs tracking-widest uppercase">© 2026 Click Cell Santa Fe</p>
         </div>
       </footer>
@@ -110,8 +101,6 @@ function CardProducto({ producto, esDestacado }: { producto: any, esDestacado: b
 
   return (
     <div className={`group relative bg-[#1a1a1a] border border-white/5 rounded-[2rem] overflow-hidden hover:border-blue-500/50 transition-all duration-500 flex flex-col h-full shadow-2xl ${esDestacado ? 'md:flex-row' : ''}`}>
-
-      {/* IMAGEN */}
       <div className={`relative bg-gradient-to-br from-[#222] to-[#111] overflow-hidden ${esDestacado ? 'md:w-1/2' : 'w-full aspect-[4/5]'}`}>
         <img
           src={producto.ImagenURL}
@@ -124,13 +113,10 @@ function CardProducto({ producto, esDestacado }: { producto: any, esDestacado: b
           </div>
         )}
       </div>
-
-      {/* CONTENIDO */}
       <div className="p-8 flex flex-col flex-grow">
         <div className="flex-grow">
           <h4 className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-2">Smartphone</h4>
           <h3 className={`font-black tracking-tighter text-white mb-4 ${esDestacado ? 'text-3xl' : 'text-xl'}`}>{producto.Producto}</h3>
-
           <div className="mb-6 flex items-baseline gap-3">
             <span className="text-2xl font-black text-white italic">${precioFinal.toLocaleString('es-AR')}</span>
             {desc > 0 && (
@@ -138,18 +124,13 @@ function CardProducto({ producto, esDestacado }: { producto: any, esDestacado: b
             )}
           </div>
         </div>
-
         {producto.Cuotas > 1 && (
           <div className="text-[10px] font-bold text-gray-400 border border-white/10 w-fit px-3 py-1 rounded-lg mb-6 uppercase">
             💳 {producto.Cuotas} Cuotas fijas
           </div>
         )}
-
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Quiero info del ${producto.Producto}`}
-          target="_blank"
-          className="bg-white text-black text-center py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300"
-        >
+        <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Quiero info del ${producto.Producto}`} target="_blank"
+          className="bg-white text-black text-center py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all duration-300">
           Consultar Stock
         </a>
       </div>
