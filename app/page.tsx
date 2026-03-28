@@ -102,13 +102,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-white/10 py-20 bg-[#0a0a0a]">
+      {/* FOOTER CORREGIDO: LOGO REDONDO */}
+      <footer className="border-t border-white/5 py-16 bg-[#0a0a0a]">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="w-24 h-24 mx-auto mb-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500 hover:opacity-100">
-            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+
+          {/* DIV DEL LOGO: AHORA REDONDO */}
+          <div className="w-20 h-20 mx-auto mb-6 opacity-60 grayscale hover:grayscale-0 transition-all hover:opacity-100 rounded-full overflow-hidden border border-white/10 bg-black p-1 shadow-inner">
+            <img src="/logo.png" alt="Logo Footer" className="w-full h-full object-cover rounded-full" />
           </div>
-          <p className="text-gray-500 text-[10px] tracking-[0.5em] uppercase font-bold">© 2026 Click Cell Santa Fe</p>
+
+          <p className="text-gray-500 text-xs tracking-widest uppercase">© 2026 Click Cell Santa Fe</p>
+          <p className="text-gray-700 text-[10px] mt-2 italic">Tecnología de punta en tu mano</p>
         </div>
       </footer>
     </main>
