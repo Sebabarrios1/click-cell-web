@@ -39,7 +39,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#f3f4f6] text-slate-800 font-sans selection:bg-blue-100">
-
       {/* NAVBAR */}
       <nav className="bg-white/70 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 py-3">
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -59,7 +58,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* HERO - Estilo Pastel */}
+      {/* HERO */}
       <header className="relative py-16 md:py-24 overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10 text-center md:text-left">
           <span className="text-blue-400 font-bold tracking-[0.2em] text-[10px] uppercase mb-3 block">Premium Tech Store</span>
@@ -70,28 +69,25 @@ export default function Home() {
             </span>
           </h2>
         </div>
-        {/* Círculos pastel de fondo */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 blur-[100px] rounded-full -translate-y-1/2 opacity-60"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-50 blur-[100px] rounded-full translate-y-1/2 opacity-60"></div>
       </header>
 
-      {/* DESTACADOS */}
-      {destacados.length > 0 && (
-        <section className="max-w-6xl mx-auto px-6 pb-16">
-          <div className="flex items-center gap-4 mb-10">
-            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-slate-800">Destacados</h2>
-            <div className="h-[1px] flex-grow bg-slate-200"></div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {destacados.map((p, index) => (
-              <CardProducto key={index} producto={p} esDestacado={true} onClick={() => setSelectedProduct(p)} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* STOCK DISPONIBLE */}
+      {/* GRILLAS */}
       <section className="max-w-6xl mx-auto px-6 pb-24">
+        {destacados.length > 0 && (
+          <div className="mb-16">
+            <div className="flex items-center gap-4 mb-10">
+              <h2 className="text-3xl font-black tracking-tighter uppercase italic text-slate-800">Destacados</h2>
+              <div className="h-[1px] flex-grow bg-slate-200"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {destacados.map((p, index) => (
+                <CardProducto key={index} producto={p} esDestacado={true} onClick={() => setSelectedProduct(p)} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center gap-4 mb-10">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em]">Explorá el stock</h3>
           <div className="h-[1px] flex-grow bg-slate-200"></div>
@@ -103,66 +99,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MODAL DETALLE */}
-      {selectedProduct && (
-        <ModalProducto
-          producto={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
+      {selectedProduct && <ModalProducto producto={selectedProduct} onClose={() => setSelectedProduct(null)} />}
 
-      {/* FOOTER */}
-      <footer className="border-t border-slate-200 py-12 bg-white">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden border border-slate-100 bg-white p-1">
-            <img src="/logo.png" alt="Logo Footer" className="w-full h-full object-cover rounded-full" />
-          </div>
-          <p className="text-slate-400 text-[10px] tracking-widest uppercase">© 2026 Click Cell Santa Fe</p>
-        </div>
+      <footer className="border-t border-slate-200 py-12 bg-white text-center">
+        <p className="text-slate-400 text-[10px] tracking-widest uppercase">© 2026 Click Cell Santa Fe</p>
       </footer>
     </main>
   );
 }
 
+// FUNCION AUXILIAR PARA PRECIOS
+function formatPrecio(precio: number, moneda: string) {
+  if (moneda?.trim().toUpperCase() === "USD") {
+    return `USD ${precio.toLocaleString('en-US')}`;
+  }
+  return `$${precio.toLocaleString('es-AR')}`;
+}
+
 function CardProducto({ producto, esDestacado, onClick }: any) {
   const fotos = producto.ImagenURL?.split(",").map((s: string) => s.trim()) || [];
-  const precioBase = parseFloat(producto.PrecioBase?.toString().replace("$", "").replace(".", "")) || 0;
+  const precioBase = parseFloat(producto.PrecioBase?.toString().replace("$", "").replace(/\./g, "")) || 0;
   const desc = parseFloat(producto.Descuento) || 0;
   const precioFinal = precioBase - (precioBase * (desc / 100));
+  const moneda = producto.Moneda || "ARS";
 
   return (
-    <div
-      onClick={onClick}
-      className={`group cursor-pointer relative bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-500 flex flex-col h-full ${esDestacado ? 'md:flex-row shadow-lg' : 'shadow-sm'}`}
-    >
+    <div onClick={onClick} className={`group cursor-pointer relative bg-white border border-slate-100 rounded-[2rem] overflow-hidden hover:shadow-xl transition-all duration-500 flex flex-col h-full ${esDestacado ? 'md:flex-row shadow-lg' : 'shadow-sm'}`}>
       <div className={`relative bg-slate-50 overflow-hidden ${esDestacado ? 'md:w-1/2' : 'w-full aspect-square'}`}>
-        <img
-          src={fotos[0]}
-          alt={producto.Producto}
-          className="w-full h-full object-contain p-6 md:p-8 group-hover:scale-105 transition-transform duration-700"
-        />
-        {desc > 0 && (
-          <div className="absolute top-4 left-4 bg-blue-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
-            {desc}% OFF
-          </div>
-        )}
+        <img src={fotos[0]} alt={producto.Producto} className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-700" />
+        {desc > 0 && <div className="absolute top-4 left-4 bg-blue-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{desc}% OFF</div>}
       </div>
-
       <div className="p-6 md:p-8 flex flex-col flex-grow justify-center">
-        <h3 className={`font-black tracking-tighter text-slate-900 mb-4 uppercase ${esDestacado ? 'text-3xl' : 'text-lg'}`}>
-          {producto.Producto}
-        </h3>
+        <h3 className={`font-black tracking-tighter text-slate-900 mb-4 uppercase ${esDestacado ? 'text-3xl' : 'text-lg'}`}>{producto.Producto}</h3>
         <div className="mb-6">
-          <span className={`font-black text-blue-600 italic ${esDestacado ? 'text-3xl' : 'text-2xl'}`}>
-            ${precioFinal.toLocaleString('es-AR')}
-          </span>
-          {desc > 0 && (
-            <span className="block text-slate-300 text-xs line-through font-bold mt-1">${precioBase.toLocaleString('es-AR')}</span>
-          )}
+          <span className={`font-black text-blue-600 italic ${esDestacado ? 'text-3xl' : 'text-2xl'}`}>{formatPrecio(precioFinal, moneda)}</span>
+          {desc > 0 && <span className="block text-slate-300 text-xs line-through font-bold mt-1">{formatPrecio(precioBase, moneda)}</span>}
         </div>
-        <div className="mt-auto text-[9px] font-black text-slate-300 tracking-widest uppercase group-hover:text-blue-400 transition-colors">
-          Detalles +
-        </div>
+        <div className="mt-auto text-[9px] font-black text-slate-300 tracking-widest uppercase">Detalles +</div>
       </div>
     </div>
   );
@@ -171,45 +144,34 @@ function CardProducto({ producto, esDestacado, onClick }: any) {
 function ModalProducto({ producto, onClose }: any) {
   const fotos = producto.ImagenURL?.split(",").map((s: string) => s.trim()) || [];
   const [index, setIndex] = useState(0);
-  const precioBase = parseFloat(producto.PrecioBase?.toString().replace("$", "").replace(".", "")) || 0;
+  const precioBase = parseFloat(producto.PrecioBase?.toString().replace("$", "").replace(/\./g, "")) || 0;
   const desc = parseFloat(producto.Descuento) || 0;
   const precioFinal = precioBase - (precioBase * (desc / 100));
+  const moneda = producto.Moneda || "ARS";
   const descripcionReal = producto.Descripcion || producto.Descripción || producto.descripcion || producto.descripción || "";
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-8 bg-slate-900/40 backdrop-blur-md overflow-y-auto">
-      <div className="bg-white w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in fade-in zoom-in duration-300">
-        <button onClick={onClose} className="absolute top-4 right-4 z-20 bg-slate-100 hover:bg-slate-200 text-slate-500 w-10 h-10 rounded-full text-xl transition-colors">×</button>
-
+      <div className="bg-white w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
+        <button onClick={onClose} className="absolute top-4 right-4 z-20 bg-slate-100 hover:bg-slate-200 text-slate-500 w-10 h-10 rounded-full text-xl">×</button>
         <div className="md:w-1/2 bg-slate-50 relative flex items-center justify-center min-h-[300px] md:min-h-[450px]">
           <img src={fotos[index]} className="max-h-[280px] md:max-h-[400px] object-contain p-6" />
           {fotos.length > 1 && (
             <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between">
-              <button onClick={() => setIndex(index === 0 ? fotos.length - 1 : index - 1)} className="w-8 h-8 rounded-full bg-white/80 shadow-sm text-slate-800">❮</button>
-              <button onClick={() => setIndex(index === fotos.length - 1 ? 0 : index + 1)} className="w-8 h-8 rounded-full bg-white/80 shadow-sm text-slate-800">❯</button>
+              <button onClick={() => setIndex(index === 0 ? fotos.length - 1 : index - 1)} className="w-8 h-8 rounded-full bg-white shadow-sm text-slate-800">❮</button>
+              <button onClick={() => setIndex(index === fotos.length - 1 ? 0 : index + 1)} className="w-8 h-8 rounded-full bg-white shadow-sm text-slate-800">❯</button>
             </div>
           )}
         </div>
-
         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
           <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tighter uppercase text-slate-900 italic">{producto.Producto}</h2>
-
-          <div className="text-slate-500 text-sm leading-relaxed mb-8 bg-slate-50 p-5 rounded-2xl border border-slate-100">
-            {descripcionReal ? (
-              <p className="whitespace-pre-line">{descripcionReal}</p>
-            ) : (
-              <p className="italic">Consultanos especificaciones por WhatsApp.</p>
-            )}
+          <div className="text-slate-500 text-sm leading-relaxed mb-8 bg-slate-50 p-5 rounded-2xl border border-slate-100 whitespace-pre-line">
+            {descripcionReal || "Consultanos especificaciones por WhatsApp."}
           </div>
-
           <div className="mb-8">
-            <span className="text-4xl font-black text-blue-600 italic">${precioFinal.toLocaleString('es-AR')}</span>
+            <span className="text-4xl font-black text-blue-600 italic">{formatPrecio(precioFinal, moneda)}</span>
           </div>
-
-          <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Info del ${producto.Producto}`} target="_blank"
-            className="block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-95">
-            WHATSAPP
-          </a>
+          <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola! Info del ${producto.Producto}`} target="_blank" className="block w-full bg-slate-900 text-white text-center py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all">WHATSAPP</a>
         </div>
       </div>
     </div>
