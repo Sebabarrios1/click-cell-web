@@ -15,7 +15,7 @@ export default function Home() {
     Papa.parse(LINK_EXCEL_CSV, {
       download: true,
       header: true,
-      skipEmptyLines: true, // Salta líneas vacías para evitar errores
+      skipEmptyLines: true,
       complete: (results: any) => {
         const datosLimpios = results.data.filter((p: any) => p.Producto || p.producto);
         setProductos(datosLimpios);
@@ -33,10 +33,11 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#f1f5f9] text-slate-800 font-sans selection:bg-blue-100">
+      {/* NAVBAR */}
       <nav className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 py-4">
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg bg-white transition-all hover:scale-110">
+            <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-600 shadow-lg bg-white transition-all hover:scale-110">
               <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block">
@@ -48,16 +49,18 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* HERO */}
       <header className="relative py-20 md:py-32 overflow-hidden bg-white">
         <div className="max-w-6xl mx-auto px-6 relative z-10 text-center md:text-left">
           <span className="text-blue-500 font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Premium Technology Store</span>
-          <h2 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic leading-[0.9] text-slate-900 text-left md:text-left">
+          <h2 className="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic leading-[0.9] text-slate-900">
             EL FUTURO <br /> <span className="text-blue-600 font-normal not-italic">EN TU MANO.</span>
           </h2>
         </div>
         <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-50 blur-[120px] rounded-full translate-x-1/4 opacity-50"></div>
       </header>
 
+      {/* PRODUCTOS */}
       <div className="max-w-6xl mx-auto px-6 py-12">
         {destacados.length > 0 && (
           <section className="mb-20">
@@ -91,14 +94,15 @@ export default function Home() {
   );
 }
 
-// --- LÓGICA DE PRECIO MEJORADA ---
+// --- FUNCIÓN DE PRECIO CORREGIDA (USD $630) ---
 function formatPrecio(precio: number, item: any) {
-  // Buscamos "USD" en cualquier variante (minúscula, con espacios, etc)
-  const moneda = (item.Moneda || item.moneda || "").toString().trim().toUpperCase();
+  const monedaTexto = (item.Moneda || item.moneda || "").toString().trim().toUpperCase();
 
-  if (moneda === "USD") {
-    return `USD ${precio.toLocaleString('en-US')}`;
+  if (monedaTexto === "USD") {
+    // Si es USD, ponemos las siglas ANTES del signo $
+    return `USD $${precio.toLocaleString('en-US')}`;
   }
+  // Si no, solo el signo $ para pesos
   return `$${precio.toLocaleString('es-AR')}`;
 }
 
@@ -139,7 +143,7 @@ function ModalProducto({ producto, onClose }: any) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-slate-900/60 backdrop-blur-md overflow-y-auto">
       <div className="bg-white w-full max-w-5xl min-h-[500px] rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row relative">
-        <button onClick={onClose} className="absolute top-6 right-6 z-20 bg-slate-100 hover:bg-red-500 hover:text-white text-slate-500 w-12 h-12 rounded-full text-2xl font-bold">×</button>
+        <button onClick={onClose} className="absolute top-6 right-6 z-20 bg-slate-100 hover:bg-red-500 hover:text-white text-slate-500 w-12 h-12 rounded-full text-2xl font-bold transition-all">×</button>
         <div className="md:w-1/2 bg-slate-50 relative flex items-center justify-center min-h-[350px]">
           <img src={fotos[index]} className="max-h-[300px] md:max-h-[450px] object-contain p-10" />
           {fotos.length > 1 && (
